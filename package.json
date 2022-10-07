@@ -1,0 +1,23 @@
+{
+  "name": "node-project",
+  "version": "1.0.0",
+  "description": "Server-side developement NodeJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maaferna/NodeJsProjectCoursera.git"
+  },
+  "keywords": [
+    "nodejs"
+  ],
+  "author": "Marco Parra",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maaferna/NodeJsProjectCoursera/issues"
+  },
+  "homepage": "https://github.com/maaferna/NodeJsProjectCoursera#readme"
+}

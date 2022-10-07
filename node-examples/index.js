@@ -15,8 +15,9 @@ function solverRect(l,b) {
             + ", and b = " + b + " is: " + rectangle.perimeter());
         }
     });
-}
-console.log("This statment is after the call to rectangle function")
+    console.log("This statment is after the call to rectangle function");
+};
+
 solverRect(3, 4);
 solverRect(0, 5);
 solverRect(-3, 6);

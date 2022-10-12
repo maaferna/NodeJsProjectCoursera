@@ -8,39 +8,21 @@ const morgan = require('morgan');
 // configure router with express 
 const bodyParser = require('body-parser');
 
+// Import Router express from dishRouter file
+const dishRouter = require('./routes/dishRouter');
 
 const hostname = 'localhost';
 const port = 3000;
 
 const app = express();
 app.use(morgan('dev')); //use morgan in the developement stage
-app.use(express.static(__dirname + '/public'));
+app.use(express.json());
+
 
 // declare routes
-app.use(bodyParser.json());
-app.all('/dishes', (req, res, next) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    next();
-});
+app.use('/dishes', dishRouter);
 
-app.get('/dishes', (req, res, next) => {
-    res.end('Will send all the dishes to you!');
-});
-
-app.post('/dishes', (req, res, next) => {
-    res.end('Will add the dish: ' +  req.body.name 
-            + 'with details: ' + req.body.description);
-});
-
-app.put('/dishes', (req, res, next) => {
-    res.statusCode = 403;
-    res.end('Put operation not supported on in dishes');
-});
-
-app.delete('/dishes', (req, res, next) => {
-    res.end('Deleting all the dishes');
-});
+app.use(express.static(__dirname + '/public'));
 
 app.get('/dishes/:dishId', (req, res, next) => {
     res.end('Will send details of the dish: ' + req.params.dishId+

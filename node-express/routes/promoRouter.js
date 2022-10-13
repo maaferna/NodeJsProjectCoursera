@@ -1,10 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const dishRouter = express.Router();
-dishRouter.use(express.json());
+const promoRouter = express.Router();
+promoRouter.use(express.json());
 
-dishRouter.route('/')
+promoRouter.route('/')
 .all((req, res, next) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
@@ -12,25 +12,25 @@ dishRouter.route('/')
 })
 
 .get((req, res, next) => {
-    res.end('Will send all the dishes to you!');
+    res.end('Will send all the promotions to you!');
 })
 
 .post((req, res, next) => {
-    res.end('Will add the dish: ' +  req.body.name 
+    res.end('Will add the promotions: ' +  req.body.name 
             + 'with details: ' + req.body.description);
 })
 
 .put((req, res, next) => {
     res.statusCode = 403;
-    res.end('Put operation not supported on in dishes');
+    res.end('Put operation not supported on in promoes');
 })
 
 .delete((req, res, next) => {
-    res.end('Deleting all the dishes');
+    res.end('Deleting all the promoes');
 });
 
 
-dishRouter.route('/:dishId')
+promoRouter.route('/:promoId')
 .all((req, res, next) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
@@ -38,25 +38,25 @@ dishRouter.route('/:dishId')
 })
 
 .get((req, res, next) => {
-    res.end('Will send details of the dish: ' + req.params.dishId+
+    res.end('Will send details of the promotion: ' + req.params.promoId+
     'to you!');
 })
 
 .post((req, res, next) => {
     res.statusCode = 403;
-    res.end('Post operation not supported on in dishes/: ' +
-    req.params.dishId)
+    res.end('Post operation not supported on in promotion/: ' +
+    req.params.promoId)
 })
 .put((req, res, next) => {
-    res.write('Will update the dish: ' + req.params.dishId +
+    res.write('Will update the promotion: ' + req.params.promoId +
         '\n');
-    res.end('Will update the dish: ' + req.body.name 
+    res.end('Will update the promotion: ' + req.body.name 
     + ' with details: ' + req.body.description);
 })
 
 .delete((req, res, next) => {
-    res.end('Deleting dish: ' + req.params.dishId);
+    res.end('Deleting promotion: ' + req.params.promoId);
 });
 
 
-module.exports = dishRouter;
+module.exports = promoRouter;

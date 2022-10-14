@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/maaferna/NodeJsProjectCoursera/issues"
   },
-  "homepage": "https://github.com/maaferna/NodeJsProjectCoursera#readme"
+  "homepage": "https://github.com/maaferna/NodeJsProjectCoursera#readme",
+  "dependencies": {
+    "express-generator": "^4.16.1"
+  }
 }

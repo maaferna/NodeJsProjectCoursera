@@ -1,0 +1,14 @@
+Go to folder that contain mongodb
+
+data-mongoose is the name of folder that contain the data of the project
+
+mongod --dbpath=data-mongoose --bind_ip 127.0.0.1
+
+
+go to folder of project and execute this command to connect with database
+
+mongo
+
+
+After execute with next command
+npm start

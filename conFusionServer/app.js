@@ -4,11 +4,25 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+const mongoose = require('mongoose');
+const Dishes = require('./models/dishes');
+const { createConnection } = require('mongoose');
+mongoose.Promise = require('bluebird');
+mongoose.Promise = Promise;
+
+const url = 'mongodb://localhost:27017/conFusion';
+
+mongoose.connect(url, {useMongoClient:true})
+  .then((db) => console.log("Database Connected Successfully"))
+
+  .catch((err) => console.log(err));
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var dishRouter = require('./routes/dishRouter');
 var promoRouter = require('./routes/promoRouter');
 var leaderRouter = require('./routes/leaderRouter');
+
 
 var app = express();
 
@@ -44,5 +58,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 module.exports = app;

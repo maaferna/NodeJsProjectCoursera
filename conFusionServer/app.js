@@ -33,30 +33,45 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+
+// Set up your Express application to send signed cookies.
+app.use(cookieParser('passwordcookie'));
 
 // Authorization configuration
 function auth (req, res, next) {
-  console.log(req.headers);
-  var authHeader = req.headers.authorization;
-  if (!authHeader) {
-      var err = new Error('You are not authenticated!');
-      res.setHeader('WWW-Authenticate', 'Basic');
+  console.log(req.signedCookies);
+  if (!req.signedCookies.user) {
+    var authHeader = req.headers.authorization;
+    if (!authHeader) {
+        var err = new Error('You are not authenticated!');
+        res.setHeader('WWW-Authenticate', 'Basic');
+        err.status = 401;
+        next(err);
+        return;
+    }
+    var auth = new Buffer.from(authHeader.split(' ')[1], 'base64').toString().split(':'); //alloc
+    var username = auth[0];
+    var password = auth[1];
+    if (username === 'admin' && password === 'password') {
+      res.cookie('user', 'admin', {signed: true});
+      return next();
+    }
+    else {
+      var err = new Error('You are not authonticated!');
+      res.setHeader('WWW-Authonticate', 'Basic');
       err.status = 401;
-      next(err);
-      return;
-  }
-  var auth = new Buffer.from(authHeader.split(' ')[1], 'base64').toString().split(':'); //alloc
-  var username = auth[0];
-  var password = auth[1];
-  if (username === 'admin' && password === 'password') {
-    return next();
+      return next(err);
+    }
   }
   else {
-    var err = new Error('You are not authonticated!');
-    res.setHeader('WWW-Authonticate', 'Basic');
-    err.status = 401;
-    return next(err);
+    if (req.signedCookies.user === 'admin') {
+      next();
+    }
+    else {
+      var err = new Error('You are not authonticated!');
+      err.status = 401;
+      return next(err);
+    }
   }
 }
 

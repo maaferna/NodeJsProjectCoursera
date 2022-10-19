@@ -4,6 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// express with express session
+var session = require('express-session');
+var FileStore = require('session-file-store');
+var MongoStore = require('connect-mongo');
+
 const mongoose = require('mongoose');
 const Dishes = require('./models/dishes');
 const { createConnection } = require('mongoose');
@@ -35,12 +40,23 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Set up your Express application to send signed cookies.
-app.use(cookieParser('passwordcookie'));
+// app.use(cookieParser('passwordcookie'));
+// change cookie parser to express session
+
+app.use(session({
+  name:'session-id',
+  secret: 'passwordcookie',
+  saveUninitialized: false,
+  resave: false,
+  store: MongoStore.create({ mongoUrl: 'mongodb://localhost/conFusion' })
+}));
 
 // Authorization configuration
 function auth (req, res, next) {
-  console.log(req.signedCookies);
-  if (!req.signedCookies.user) {
+  // console.log(req.signedCookies);
+  console.log(req.session);
+  // if (!req.signedCookies.user) {
+  if (!req.session.user) {
     var authHeader = req.headers.authorization;
     if (!authHeader) {
         var err = new Error('You are not authenticated!');
@@ -53,7 +69,8 @@ function auth (req, res, next) {
     var username = auth[0];
     var password = auth[1];
     if (username === 'admin' && password === 'password') {
-      res.cookie('user', 'admin', {signed: true});
+      req.session.user = 'admin';
+      // res.cookie('user', 'admin', {signed: true});
       return next();
     }
     else {
@@ -64,7 +81,8 @@ function auth (req, res, next) {
     }
   }
   else {
-    if (req.signedCookies.user === 'admin') {
+    // if (req.signedCookies.user === 'admin') {
+    if (req.session.user === 'admin') {
       next();
     }
     else {

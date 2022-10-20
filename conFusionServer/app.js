@@ -51,38 +51,24 @@ app.use(session({
   store: MongoStore.create({ mongoUrl: 'mongodb://localhost/conFusion' })
 }));
 
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+
 // Authorization configuration
 function auth (req, res, next) {
   // console.log(req.signedCookies);
   console.log(req.session);
   // if (!req.signedCookies.user) {
   if (!req.session.user) {
-    var authHeader = req.headers.authorization;
-    if (!authHeader) {
-        var err = new Error('You are not authenticated!');
-        res.setHeader('WWW-Authenticate', 'Basic');
-        err.status = 401;
-        next(err);
-        return;
-    }
-    var auth = new Buffer.from(authHeader.split(' ')[1], 'base64').toString().split(':'); //alloc
-    var username = auth[0];
-    var password = auth[1];
-    if (username === 'admin' && password === 'password') {
-      req.session.user = 'admin';
-      // res.cookie('user', 'admin', {signed: true});
-      return next();
-    }
-    else {
-      var err = new Error('You are not authonticated!');
-      res.setHeader('WWW-Authonticate', 'Basic');
+      var err = new Error('You are not authenticated!');
+      res.setHeader('WWW-Authenticate', 'Basic');
       err.status = 401;
-      return next(err);
+      next(err);
+      return;
     }
-  }
   else {
     // if (req.signedCookies.user === 'admin') {
-    if (req.session.user === 'admin') {
+    if (req.session.user === 'authenticated') {
       next();
     }
     else {
@@ -98,8 +84,7 @@ app.use(auth);
 // After retreive static file from static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+
 app.use('/dishes', dishRouter);
 app.use('/promotions', promoRouter);
 app.use('/leaders', leaderRouter);

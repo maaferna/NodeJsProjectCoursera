@@ -28,6 +28,9 @@ var dishRouter = require('./routes/dishRouter');
 var promoRouter = require('./routes/promoRouter');
 var leaderRouter = require('./routes/leaderRouter');
 
+//configure passport to authentication process
+var passport = require('passport');
+var authenticate = require('./authenticate');
 
 var app = express();
 
@@ -51,31 +54,28 @@ app.use(session({
   store: MongoStore.create({ mongoUrl: 'mongodb://localhost/conFusion' })
 }));
 
+// to add passport authentication
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // Authorization configuration
 function auth (req, res, next) {
   // console.log(req.signedCookies);
-  console.log(req.session);
+  //console.log(req.session);
   // if (!req.signedCookies.user) {
-  if (!req.session.user) {
-      var err = new Error('You are not authenticated!');
-      res.setHeader('WWW-Authenticate', 'Basic');
-      err.status = 401;
-      next(err);
-      return;
-    }
+  // if (!req.session.user) {
+  if (!req.user) {
+    var err = new Error('You are not authenticated!');
+    err.status = 403;
+    next(err);
+    return;
+  }
   else {
     // if (req.signedCookies.user === 'admin') {
-    if (req.session.user === 'authenticated') {
-      next();
-    }
-    else {
-      var err = new Error('You are not authonticated!');
-      err.status = 401;
-      return next(err);
-    }
+    next();
   }
 }
 

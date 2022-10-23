@@ -31,6 +31,7 @@ var leaderRouter = require('./routes/leaderRouter');
 //configure passport to authentication process
 var passport = require('passport');
 var authenticate = require('./authenticate');
+var config = require('./config');
 
 var app = express();
 
@@ -46,23 +47,23 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser('passwordcookie'));
 // change cookie parser to express session
 
-app.use(session({
+/* app.use(session({
   name:'session-id',
   secret: 'passwordcookie',
   saveUninitialized: false,
   resave: false,
-  store: MongoStore.create({ mongoUrl: 'mongodb://localhost/conFusion' })
-}));
+  store: MongoStore.create({ mongoUrl: config.mongoUrl })
+})); */
 
 // to add passport authentication
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // Authorization configuration
-function auth (req, res, next) {
+/* function auth (req, res, next) {
   // console.log(req.signedCookies);
   //console.log(req.session);
   // if (!req.signedCookies.user) {
@@ -79,7 +80,7 @@ function auth (req, res, next) {
   }
 }
 
-app.use(auth);
+app.use(auth); */
 
 // After retreive static file from static folder
 app.use(express.static(path.join(__dirname, 'public')));

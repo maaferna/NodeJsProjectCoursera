@@ -21,3 +21,10 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzU3ZmU3MzBlZjM4YTI1MTZmZmVkZTM
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzU3M2VlOGNiOTc0YjUyNDkyNjdjOTEiLCJpYXQiOjE2NjY2NjIyNDYsImV4cCI6MTY2NjY2NTg0Nn0.xIuA3LPn3Vt7BBGh02_gUIUKx2IzadRVJwItLzBxVeY
 
 635742b9cb974b5249267c93
+
+
+Create openssl key, step to step:
+
+openssl genrsa 1024 > private.key
+openssl req -new -key private.key -out cert.csr
+openssl x509 -req -in cert.csr -signkey private.key -out certificate.pem
